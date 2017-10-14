@@ -35,7 +35,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert'
   
     assert_not flash.empty?
-  
+    
+    assert th_logged_in?
   end
   
 end
