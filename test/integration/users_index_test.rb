@@ -4,6 +4,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
 
   def setup
     @user = users(:michael)
+    @unactivated = users(:unactivated)
     @admin = users(:michael)
     @non_admin = users(:archer)
   end
@@ -17,6 +18,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     # Make sure we have all the users from page 1...
     User.paginate(page: 1).each do |user|
       assert_select 'a[href=?]', user_path(user), text: user.name
+      assert user.activated?
     end
     
     # ...and none from page 2.
@@ -49,4 +51,9 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     assert_select 'a', text: 'delete', count: 0
   end
 
+  test "view unactiated user redirects to root" do
+    th_log_in_as(@user)
+    get user_path(@unactivated)
+    assert_redirected_to root_url
+  end
 end

@@ -33,7 +33,7 @@ module SessionsHelper
       user = User.find_by(id: user_id)
       
       # Does the remember_token authenticate them?
-      if user && user.authenticated?(cookies[:remember_token])
+      if user && user.authenticated?(:remember, cookies[:remember_token])
         
         # Log in and use this user.
         log_in user
